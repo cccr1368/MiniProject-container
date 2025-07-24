@@ -1,10 +1,6 @@
-FROM maven:3.8.6-openjdk-8 AS builder
-WORKDIR /app
-COPY . .
-RUN mvn clean package
-
 FROM openjdk:8-jdk-alpine
 VOLUME /tmp
-COPY --from=builder /app/target/*.jar app.jar
+ARG JAR_FILE=target/*.jar
+COPY ${JAR_FILE} app.jar
 EXPOSE 8090
 ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"]
